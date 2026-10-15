@@ -31,7 +31,7 @@
 [submodule "OmnipodKit"]
 	path = OmnipodKit
 	url = https://github.com/manudrijvers/OmnipodKit
-	branch = o5-dex-direct
+	branch = o5-bench-dry-run
 [submodule "AccuChekKit"]
 	path = AccuChekKit
 	url = https://github.com/loopandlearn/AccuChekKit
