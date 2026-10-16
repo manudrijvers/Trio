@@ -1,24 +1,19 @@
 # Removed-Pod experiment build
 
-This change targets `manudrijvers/Trio` branch `trio-o5-dex-direct`, preserving
-its existing G7 implementation. The OmnipodKit pin combines that feature with
-the bench runner on `manudrijvers/OmnipodKit` branch `o5-bench-dry-run`.
+The physical runner follows the single-active-Pod workflow: remove the Pod from
+the body, leave it active in Trio, run experiments, then deactivate and replace it
+normally. Open **Removed Pod Experiment** in Omnipod 5 settings. Logging is
+automatic; the screen provides redacted and private raw exports.
 
-The implementation and validation handoff are in
-[OmnipodKit/Research/O5Bench](../OmnipodKit/Research/O5Bench/README.md).
+A real BLE adapter, certificate-policy selection, persisted exclusive-access lock
+and separate experiment actions are implemented. A full Xcode build and physical
+Pod acceptance have not been verified in this Linux workspace. Portable tests and
+iOS-source syntax checks do not establish that the app is ready to install.
 
-The owner's updated workflow uses **one active Pod**: remove it physically, keep
-it active in Trio for the experiment, then replace it normally. No second
-controller or active-context handoff is required.
+See [the implementation and validation notes](../OmnipodKit/Research/O5Bench/README.md)
+for operation, safeguards, signing assumptions and remaining validation.
 
-This build provides a persistent offline runner, an Omnipod settings dry-run
-screen, strict response validation and verified synthetic/redacted exports.
-Physical experiments remain disabled pending provisioned signing-policy
-integration, physical batch validation and an exclusive writer gate on the
-existing active controller. The dry-run screen does not engage a physical bench
-mode or change ordinary therapy behavior.
-
-The original untracked `TRIO_NEXT_EXPERIMENT_BUILD.md` is preserved. Its
-requirement for therapy continuing on a separate Pod/controller is superseded by
-the owner's single-Pod clarification; its protocol and uncertainty requirements
-remain the implementation reference.
+**Pod Experiment Dry Run** remains available for simulation. Its exports are
+synthetic. The original `TRIO_NEXT_EXPERIMENT_BUILD.md` remains the protocol
+reference; the owner's single-active-Pod clarification supersedes its earlier
+separate-controller requirement.

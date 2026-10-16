@@ -1,0 +1,51 @@
+name: O5 experiment simulator build
+
+on:
+  push:
+    branches: [trio-o5-dex-direct]
+    paths:
+      - OmnipodKit
+      - .github/workflows/o5_bench_build.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: o5-experiment-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+      - name: Build Trio for iOS Simulator
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -workspace Trio.xcworkspace \
+            -scheme Trio \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/O5BenchDerivedData" \
+            -skipPackagePluginValidation \
+            -skipMacroValidation \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="" \
+            COMPILER_INDEX_STORE_ENABLE=NO \
+            | tee "$RUNNER_TEMP/o5-experiment-build.log"
+      - name: Save build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: o5-experiment-build-log
+          path: ${{ runner.temp }}/o5-experiment-build.log
+          retention-days: 7
