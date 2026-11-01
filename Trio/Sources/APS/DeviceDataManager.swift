@@ -651,12 +651,20 @@ extension BaseDeviceDataManager: DeviceManagerDelegate {
 
     func deviceManager(
         _: DeviceManager,
-        logEventForDeviceIdentifier _: String?,
-        type _: DeviceLogEntryType,
+        logEventForDeviceIdentifier deviceIdentifier: String?,
+        type: DeviceLogEntryType,
         message: String,
         completion _: ((Error?) -> Void)?
     ) {
-        debug(.deviceManager, "Device message: \(message)")
+        let eventType: String
+        switch type {
+        case .send: eventType = "send"
+        case .receive: eventType = "receive"
+        case .error: eventType = "error"
+        case .connection: eventType = "connection"
+        default: eventType = "other"
+        }
+        debug(.deviceManager, "Device message [\(deviceIdentifier ?? "unknown")] [\(eventType)]: \(message)")
     }
 }
 
